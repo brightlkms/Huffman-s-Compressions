@@ -5,8 +5,8 @@
 #include <vector>
 #include <fstream>
 #include "HCNode.h"
-#include "BitInputStream.h"
-#include "BitOutputStream.h"
+//#include "BitInputStream.h"
+//#include "BitOutputStream.h"
 
 using namespace std;
 
@@ -30,14 +30,14 @@ class HCTree {
 private:
     HCNode* root;
     vector<HCNode*> leaves;
-
+    //note on leaves: each index is the value of the symbol youre trying to encode.
 public:
     // explicit keyword is used to avoid accidental implicit conversions
     explicit HCTree() : root(0) {
         leaves = vector<HCNode*>(256, (HCNode*) 0);
     }
 
-    ~HCTree();
+    // ~HCTree();
 
     /** Use the Huffman algorithm to build a Huffman coding trie.
      *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 
@@ -52,7 +52,7 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    void encode(byte symbol, BitOutputStream& out) const;
+    //void encode(byte symbol, BitOutputStream& out) const;
 
     /** Write to the given ofstream
      *  the sequence of bits (as ASCII) coding the given symbol.
@@ -68,7 +68,7 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    int decode(BitInputStream& in) const;
+    //int decode(BitInputStream& in) const;
 
     /** Return the symbol coded in the next sequence of bits (represented as 
      *  ASCII text) from the ifstream.
