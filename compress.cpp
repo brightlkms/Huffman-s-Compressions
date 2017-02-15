@@ -18,18 +18,22 @@ int main(int argc, char** argv){
 	//for counting occurences of bytes
 	vector<int> freqs (256, 0);
 
+	if(in.peek() == ifstream::traits_type::eof()){
+		cout<<"File is empty";
+		return -1;
+	}
 	while(1){
 		next = in.get();
-		c =next;
-		freqs[c]++;
 		if(in.eof()) break;
+		else{
+			c=next;
+			freqs[c]++;
+		}
 	}
-	// in.close();
-
 	//Constructing Huff man
 	HCTree hct;
 	hct.build(freqs);
-
+	
 	ofstream out;
 	out.open(outfile);
 	//writing header file (need to fix this)
@@ -40,8 +44,8 @@ int main(int argc, char** argv){
 	in.seekg(0, ios::beg);
 	while(1){
 		next = in.get();
-		hct.encode(next, out);
 		if(in.eof()) break;
+		hct.encode(next, out);
 	}
 	//missing code from reading byte and encoding it to out file
 	out.close();

@@ -4,7 +4,7 @@
 
 using namespace std;
 int main(int argc, char** argv){
-	cout << "Compression Running" <<endl;
+	cout << "Uncompress Running" <<endl;
 	if(argc < 2){
 		cout << "Compress requires 2 arguments infile and outfile" <<endl;
 		return -1;
@@ -30,10 +30,15 @@ int main(int argc, char** argv){
 	ofstream out;
 	out.open(outfile);
 
-	out << hct.decode(in);
-
+	while(1){
+		char ch = hct.decode(in);
+		if (ch!=-1)
+			out << ch;
+		else
+			break;
+		// if(in.eof()) break;
+	}
+	
 	in.close();
 	out.close();
-
-	return 0;
 }
