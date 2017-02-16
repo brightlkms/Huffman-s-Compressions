@@ -1,5 +1,5 @@
-#include "HCNode.cpp"
-#include "HCTree.cpp"
+#include "HCNode.h"
+#include "HCTree.h"
 #include <typeinfo>
 
 using namespace std;
