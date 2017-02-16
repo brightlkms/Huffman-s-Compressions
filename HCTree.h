@@ -31,13 +31,14 @@ private:
     HCNode* root;
     vector<HCNode*> leaves;
     //note on leaves: each index is the value of the symbol youre trying to encode.
+    priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
 public:
     // explicit keyword is used to avoid accidental implicit conversions
     explicit HCTree() : root(0) {
         leaves = vector<HCNode*>(256, (HCNode*) 0);
     }
 
-    // ~HCTree();
+    ~HCTree();
 
     /** Use the Huffman algorithm to build a Huffman coding trie.
      *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 

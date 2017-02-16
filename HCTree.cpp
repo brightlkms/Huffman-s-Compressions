@@ -6,9 +6,22 @@ Overview: This is an implementation file for Huffman Compression Trie.
 #include "HCTree.h"
 
 using namespace std;
+void HCTree::helper_del(HCNode* ptr){
+	if(ptr->c0==0 && ptr->c1==0)
+		delete ptr;
+	else{
+		helper_del(ptr->c0);
+		helper_del(ptr->c1);
+		delete ptr;
+	}
+}
 
+HCTree::~HCTree(){
+	while(pq.size()!=0){
+  	helper_del(root);
+  }
+}
 void HCTree::build(const vector<int>& freqs){
-	priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
 	//add all nodes to a pq
 	int i=0;
 
