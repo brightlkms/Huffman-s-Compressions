@@ -39,7 +39,7 @@ public:
     }
 
     ~HCTree();
-
+    void helper_del(HCNode*);
     /** Use the Huffman algorithm to build a Huffman coding trie.
      *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 
      *  the frequency of occurrence of byte i in the message.
