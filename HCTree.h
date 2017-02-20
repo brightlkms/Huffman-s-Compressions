@@ -4,9 +4,10 @@
 #include <queue>
 #include <vector>
 #include <fstream>
+#include <string>
 #include "HCNode.h"
-//#include "BitInputStream.h"
-//#include "BitOutputStream.h"
+#include "BitInputStream.h"
+#include "BitOutputStream.h"
 
 using namespace std;
 
@@ -32,13 +33,19 @@ private:
     vector<HCNode*> leaves;
     //note on leaves: each index is the value of the symbol youre trying to encode.
     priority_queue<HCNode*, vector<HCNode*>, HCNodePtrComp> pq;
+    
 public:
     // explicit keyword is used to avoid accidental implicit conversions
     explicit HCTree() : root(0) {
         leaves = vector<HCNode*>(256, (HCNode*) 0);
     }
-
     ~HCTree();
+    string result_in;
+    int totalbits;
+    unsigned int file_size(string);
+    //fill in encoded bit in string to find first byte
+    
+    void find_future(byte symbol);
     void helper_del(HCNode*);
     /** Use the Huffman algorithm to build a Huffman coding trie.
      *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 
@@ -53,7 +60,7 @@ public:
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    //void encode(byte symbol, BitOutputStream& out) const;
+    void encode(byte symbol, BitOutputStream& out) const;
 
     /** Write to the given ofstream
      *  the sequence of bits (as ASCII) coding the given symbol.
@@ -62,14 +69,14 @@ public:
      *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT 
      *  BE USED IN THE FINAL SUBMISSION.
      */
-    void encode(byte symbol, ofstream& out) const;
+    // void encode(byte symbol, ofstream& out) const;
 
 
     /** Return symbol coded in the next sequence of bits from the stream.
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
-    //int decode(BitInputStream& in) const;
+    int decode(BitInputStream& in);
 
     /** Return the symbol coded in the next sequence of bits (represented as 
      *  ASCII text) from the ifstream.
@@ -78,7 +85,7 @@ public:
      *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT BE USED
      *  IN THE FINAL SUBMISSION.
      */
-    int decode(ifstream& in) const;
+    // int decode(ifstream& in) const;
 
 };
 

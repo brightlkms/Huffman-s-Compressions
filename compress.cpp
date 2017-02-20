@@ -23,7 +23,7 @@ int main(int argc, char** argv){
 		return -1;
 	}
 	while(1){
-		next = in.get();
+		next = in.get();//get one byte
 		if(in.eof()) break;
 		else{
 			c=next;
@@ -33,20 +33,45 @@ int main(int argc, char** argv){
 	//Constructing Huff man
 	HCTree hct;
 	hct.build(freqs);
-	
+	//------------------Final starts here-----------------------
+	//new way to write your header file
+	//
 	ofstream out;
 	out.open(outfile);
+	//get total bit that results from file in
+	BitOutputStream bos(out);
 	//writing header file (need to fix this)
+	in.clear();
+	in.seekg(0, ios::beg);
+	//ENCODE MAGICAL IMPOSSIBLE HEADER
+	//-----------------------------------------------------
 	for(auto a : freqs){
 		out << a << endl;
 	}
 	in.clear();
 	in.seekg(0, ios::beg);
+	//-----------------------------------------------------
+	//ENCODE PADDED BIT
+	//Find total bit at the end
 	while(1){
 		next = in.get();
 		if(in.eof()) break;
-		hct.encode(next, out);
+		hct.find_future(next);
 	}
+	int bit_length = hct.result_in.length(); 
+	bos.setRemainBit(bit_length);
+
+	unsigned char bit_shift = 8-(bit_length%8);
+	out.put(bit_shift);
+	//Put number of shift at the beginning of the file
+	//-----------------------------------------------------
+	//ENCODE CHAR
+	while(1){
+		next = in.get();
+		if(in.eof()) break;
+		hct.encode(next, bos);
+	}
+	//-----------------------------------------------------
 	//missing code from reading byte and encoding it to out file
 	out.close();
 	in.close();
