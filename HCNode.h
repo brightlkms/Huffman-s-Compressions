@@ -24,7 +24,6 @@ public:
       HCNode* c1 = 0,
       HCNode* p = 0)
         : count(count), symbol(symbol), c0(c0), c1(c1), p(p) { }
-
     /** Less-than comparison, so HCNodes will work in std::priority_queue
      *  We want small counts to have high priority.
      *  And we want to break ties deterministically.

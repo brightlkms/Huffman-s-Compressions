@@ -28,6 +28,7 @@ class BitOutputStream {
         // write bit to the bitwise buffer
         void writeBit(unsigned int bit);
 
-        void setRemainBit(int);
+        void setRemainBit(int, int);
+        int returnNbits();
 };
 #endif

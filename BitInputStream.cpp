@@ -3,20 +3,37 @@
 using namespace std;
 
 void BitInputStream::fill(){
+  // cout << endl;
   buf = in.get(); // read one byte from istream to bitwise buffer
   nbits = 0;      // no bits have been read from bitwise buffer
 }
 
 unsigned int BitInputStream::readBit(){
   // fill bitwise buffer if there are no more unread bits
-  // cout << "total bit " << tbit <<endl;
-  // cout << "remain bit " << remainBit <<endl;
+  
+  if(in.eof()){
+    // cout << "total bit " << tbit <<endl;
+    // cout << "remain bit " << remainBit <<endl;
+    return -1;
+  }
   if(nbits == 8) {
+      // cout << "fill" <<endl;
       fill();
   }
+  if(in.eof()){
+    return -1;
+  }
+    cout << "total bit " << tbit <<endl;
+    // cout << "remain bit " << remainBit <<endl;
+  // cout << "remain bit " << remainBit <<endl;
+  // cout << "bitshift " << bitshift <<endl;
   if(remainBit == tbit){
+    // cout << "total bit " << tbit <<endl;
+    cout << "remain bit " << remainBit <<endl;
+    cout << "tbit " << tbit <<endl;
     for(int i=0;i<bitshift;i++){
-      buf=(buf<<1);
+      // cout << "shift" <<endl;
+      buf=(buf<<1); 
       nbits++;
     }
   }
@@ -30,12 +47,27 @@ unsigned int BitInputStream::readBit(){
   nbits++;
   tbit--;
   // return the bit we just read
+  // if(nextBit == 128){
+  //   cout << "1";
+  // }
+  // else{
+  //   cout <<"0";
+  // }
   return nextBit;
 }
-void BitInputStream::trackRemainBit(int filesize, int bs){
+void BitInputStream::setTbit(int bits){
   //hard code 512 for 256 ASCI char and new line
   //minus one for first byte indicating shift
-  tbit = (((filesize-512)-1)*8);
+  tbit = bits;
+  // tbit = filesize;
+  // bitshift = bs;
+  // remainBit = 8-bitshift;
+}
+void BitInputStream::setRemainder(int bs){
+  //hard code 512 for 256 ASCI char and new line
+  //minus one for first byte indicating shift
+  remainBit= 8-bs;
+  // tbit = filesize;
   bitshift = bs;
-  remainBit = 8-bitshift;
+  // remainBit = 8-bitshift;
 }

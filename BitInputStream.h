@@ -14,7 +14,7 @@ class BitInputStream {
         //tbit is total used for tracking whether or not it is composing the last byte
         int tbit;
         //bitshift indicates how much you need to pad
-        int bitshift;
+        int bitshift=-1;
         //remainBit used for signaling writebit that it's about to compose the last byte
         int remainBit;
     public:
@@ -28,6 +28,7 @@ class BitInputStream {
         unsigned int readBit();
 
         //track remaining bit
-        void trackRemainBit(int, int);
+        void setTbit(int);
+        void setRemainder(int);
 };
 #endif

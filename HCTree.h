@@ -42,11 +42,20 @@ public:
     ~HCTree();
     string result_in;
     int totalbits;
+    bool struc;
+
     unsigned int file_size(string);
     //fill in encoded bit in string to find first byte
-    
+    // void build_structure(ifstream&, BitInputStream&);
+    // HCNode* structure_helper(HCNode*, string, ifstream&);
+
+
+
     void find_future(byte symbol);
     void helper_del(HCNode*);
+
+    HCNode* return_root();
+    void set_root();
     /** Use the Huffman algorithm to build a Huffman coding trie.
      *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 
      *  the frequency of occurrence of byte i in the message.
@@ -54,7 +63,6 @@ public:
      *  and leaves[i] points to the leaf node containing byte i.
      */
     void build(const vector<int>& freqs);
-
     /** Write to the given BitOutputStream
      *  the sequence of bits coding the given symbol.
      *  PRECONDITION: build() has been called, to create the coding
