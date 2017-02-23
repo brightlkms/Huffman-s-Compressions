@@ -26,7 +26,7 @@ class BitOutputStream {
         void flush();
 
         // write bit to the bitwise buffer
-        void writeBit(unsigned int bit);
+        void writeBit(unsigned int bit, bool);
 
         void setRemainBit(int, int);
         int returnNbits();

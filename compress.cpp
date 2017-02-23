@@ -19,11 +19,10 @@ int main(int argc, char** argv){
 	string infile = argv[1];
 	string outfile = argv[2];
 
+	int c;
 	ifstream in;
 	in.open(infile);
 	unsigned char next;
-	int c;
-	//for counting occurences of bytes
 	vector<int> freqs (256, 0);
 
 	if(in.peek() == ifstream::traits_type::eof()){
@@ -48,24 +47,20 @@ int main(int argc, char** argv){
 			leafs++;
 		}
 	}
-	//==================================================
 	//------------------Final starts here-----------------------
-	//new way to write your header file
-	//
 	ofstream out;
 	out.open(outfile);
-	//get total bit that results from file in
 	BitOutputStream bos(out);
 	//Find future totalbit, which is header+ch
 	in.clear();
 	in.seekg(0, ios::beg);
-
+	if(leafs > 1)
 	binary(leafs, bos);
+
 	//ENCODE MAGICAL IMPOSSIBLE HEADER
 	//-----------------------------------------------------
 	traverse(hct.return_root(), bos, out);
 	//-----------------------------------------------------
-	//get header size plus bits that haven't been written to byte buffer
 	hct.totalbits=0;
 	while(1){
 		next = in.get();
@@ -74,7 +69,6 @@ int main(int argc, char** argv){
 	}
 	unsigned int headerSize = file_size(outfile);
 	int real_bitshift = 8-((hct.totalbits+bos.returnNbits())%8);
-	// cout << "my bitshift " << real_bitshift <<endl;
 	//FUNCTION
 	//setRemain bit takes in totalbit to find bitshift and remainBit
 	//bitshift is put before encoding characters
@@ -99,9 +93,6 @@ int main(int argc, char** argv){
 	//POST: got total bit length
 	// int extra_bit = bos.returnNbits();
 	binary(real_bitshift, bos);
-
-
-
 	//-----------------------------------------------------
 	//Build tree so need to clear
 	in.clear();
@@ -112,6 +103,7 @@ int main(int argc, char** argv){
 		if(in.eof()) break;
 		hct.encode(next, bos);
 	}
+	bos.writeBit(0, true);
 	//-----------------------------------------------------
 	//missing code from reading byte and encoding it to out file
 	out.close();
@@ -120,7 +112,6 @@ int main(int argc, char** argv){
 	return 0;
 }
 void traverse(HCNode* ptr, BitOutputStream& bos, ofstream& out){
-	// cout << ptr->symbol <<endl;
 	//write ASCI symbol to file
 	binary(ptr->symbol, bos);
 	int command = get_twobit(ptr, bos);
@@ -128,8 +119,6 @@ void traverse(HCNode* ptr, BitOutputStream& bos, ofstream& out){
 	//1 = 00 //2 = 01//3 = 10//4 = 11
 	//write 2 bits
 	if(command == 1){
-		// cout <<"got B's" <<endl;
-		// cout << "00 " << ptr->c0->symbol <<endl;
 		binary(ptr->c0->symbol, bos);
 	}
 	//write one param
@@ -139,7 +128,6 @@ void traverse(HCNode* ptr, BitOutputStream& bos, ofstream& out){
 	//1.right child symbol 
 	//2. number of times to get to root
 	else if(command == 3){
-		// cout << "10 " << ptr->c0->symbol <<endl;
 		binary(ptr->c0->symbol, bos);
 		traverse(ptr->c1, bos, out);
 	}
@@ -147,29 +135,27 @@ void traverse(HCNode* ptr, BitOutputStream& bos, ofstream& out){
 		traverse(ptr->c1, bos, out);
 		traverse(ptr->c0, bos, out);
 	}
-	// cout << "ending" <<endl;
 }
 int get_twobit(HCNode* ptr, BitOutputStream& bos){
-	// cout << "get two bit" << endl;
 	if(ptr->c1->c1==0 && ptr->c0->c1==0){
-		bos.writeBit(0);
-		bos.writeBit(0);
+		bos.writeBit(0, false);
+		bos.writeBit(0, false);
 		return 1;
 	}
 	else if(ptr->c1->c1==0 && ptr->c0->c1!=0){
-		bos.writeBit(0);
-		bos.writeBit(1);
+		bos.writeBit(0, false);
+		bos.writeBit(1, false);
 		return 2;
 	}
 	else if(ptr->c1->c1!=0 && ptr->c0->c1==0){
-		bos.writeBit(1);
-		bos.writeBit(0);
+		bos.writeBit(1, false);
+		bos.writeBit(0, false);
 		return 3;
 	}
 	//11
 	else if(ptr->c1->c1!=0 && ptr->c0->c1!=0){
-		bos.writeBit(1);
-		bos.writeBit(1);
+		bos.writeBit(1, false);
+		bos.writeBit(1, false);
 		return 4;
 	}
 	else{
@@ -183,13 +169,12 @@ unsigned int file_size(string filename){
 	myfile.seekg (0, ios::end);
 	end = myfile.tellg();
 	myfile.close();
-	// cout << "size is: " << (end-begin) << " bytes.\n";
+
 	unsigned int size = end-begin;
 	return size;
 }
 
 void binary(int task, BitOutputStream& bos){
-	// cout << task << endl;
 	int count = 7;
 	int cur = pow(2, count);
 	vector<int> bits;
@@ -216,6 +201,6 @@ void binary(int task, BitOutputStream& bos){
 		}
 	}
 	for(auto a: bits){
-		bos.writeBit(a);
+		bos.writeBit(a, false);
 	}
 }
