@@ -42,7 +42,7 @@ int main(int argc, char** argv){
 	//DECODE CH
 	while(1){
 		char ch = hct.decode(bis);
-		cout << "character: " << ch <<endl;
+		// cout << "character: " << ch <<endl;
 		if (int(ch) != -1){
 			out << ch;
 		}

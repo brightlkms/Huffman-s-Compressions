@@ -19,7 +19,7 @@ unsigned int BitInputStream::readBit(){
   }
   if(bitshift == tbit){
     for(int i=0;i<remainBit;i++){
-      cout << "shift" <<endl;
+      // cout << "shift" <<endl;
       buf=(buf<<1); 
       nbits++;
     }

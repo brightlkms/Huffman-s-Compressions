@@ -24,6 +24,7 @@ int main(int argc, char** argv){
 	in.open(infile);
 	unsigned char next;
 	vector<int> freqs (256, 0);
+	int chEncode=0;
 
 	if(in.peek() == ifstream::traits_type::eof()){
 		cout<<"File is empty";
@@ -54,8 +55,14 @@ int main(int argc, char** argv){
 	//Find future totalbit, which is header+ch
 	in.clear();
 	in.seekg(0, ios::beg);
-	if(leafs > 1)
+
+
+	///////////////////////////////////////////////////////////////
+	// if(leafs = 1){
 	binary(leafs, bos);
+
+	// }
+	///////////////////////////////////////////////////////////////
 
 	//ENCODE MAGICAL IMPOSSIBLE HEADER
 	//-----------------------------------------------------
@@ -67,7 +74,7 @@ int main(int argc, char** argv){
 		if(in.eof()) break;
 		hct.find_future(next);
 	}
-	unsigned int headerSize = file_size(outfile);
+	// chEncode = hct.totalbits;
 	int real_bitshift = 8-((hct.totalbits+bos.returnNbits())%8);
 	//FUNCTION
 	//setRemain bit takes in totalbit to find bitshift and remainBit
@@ -84,10 +91,8 @@ int main(int argc, char** argv){
 		if(in.eof()) break;
 		hct.find_future(next);
 	}
-	// hct.totalbits+=extra_bit;
-	//plus bitshift (gotta reduce 8)
-	// cout << "total" << hct.totalbits <<endl;
 	bos.setRemainBit(hct.totalbits+8, real_bitshift);
+	// bos.setRemainBit(chEncode+8, real_bitshift);
 	//ENCODE PADDED BIT
 	//Put number of shift at the beginning of the file
 	//POST: got total bit length
@@ -105,7 +110,6 @@ int main(int argc, char** argv){
 	}
 	bos.writeBit(0, true);
 	//-----------------------------------------------------
-	//missing code from reading byte and encoding it to out file
 	out.close();
 	in.close();
 
@@ -161,17 +165,6 @@ int get_twobit(HCNode* ptr, BitOutputStream& bos){
 	else{
 		return -1;
 	}
-}
-unsigned int file_size(string filename){
-	streampos begin,end;
-	ifstream myfile (filename, ios::binary);
-	begin = myfile.tellg();
-	myfile.seekg (0, ios::end);
-	end = myfile.tellg();
-	myfile.close();
-
-	unsigned int size = end-begin;
-	return size;
 }
 
 void binary(int task, BitOutputStream& bos){
