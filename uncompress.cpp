@@ -39,15 +39,22 @@ int main(int argc, char** argv){
 	//DECODE PADDING
 	int bitshift = binary(bis);
 	bis.setRemainder(bitshift);
+	int r;
+	unsigned char ch;
+	// cout << endl;
+	
 	//DECODE CH
 	while(1){
-		char ch = hct.decode(bis);
-		// cout << "character: " << ch <<endl;
-		if (int(ch) != -1){
-			out << ch;
-		}
-		else
+		r = hct.decode(bis);
+		ch = r;
+		// cout << r << endl;
+		if (r == -1){
+			// cout << "hello" << endl;
 			break;
+		}
+		else{
+			out.put(ch);
+		}
 	}
 	in.close();
 	out.close();

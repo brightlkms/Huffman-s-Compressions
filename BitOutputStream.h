@@ -21,7 +21,7 @@ class BitOutputStream {
     public:
         // constructor: assign 'out' to 'os', 'buf' to 0, and 'nbits' to 0
         BitOutputStream(ostream & os) : out(os), buf(0), nbits(0) {}
-
+        // int BitOutputStream::getRemainBit()
         // send the bitwise buffer to the output stream, and clear the bitwise buffer
         void flush();
 

@@ -18,7 +18,7 @@ void BitOutputStream::writeBit(unsigned int bit, bool doshift) {
   if(doshift){
     for(int i=0; i < bitshift; i++){
       buf = (buf << 1); 
-      cout<<'0';
+      // cout<<'0';
       nbits++;
       if(nbits == 8) {
         flush();
@@ -44,3 +44,6 @@ void BitOutputStream::setRemainBit(int tb, int bs){
   bitshift = bs;
   remainBit = 8-bs;
 }
+// int BitOutputStream::getRemainBit(){
+//   return tbit;
+// }

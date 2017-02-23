@@ -106,12 +106,11 @@ void HCTree::encode(byte symbol, BitOutputStream& out) const{
   	out.writeBit(*rit, false);
   }
 }
-
 int HCTree::decode(BitInputStream& in){
 	HCNode* temp = root;
 	unsigned char next;
 	int results;
-
+	// cout << "loop" <<endl;
 	while(1){
 		int read = in.readBit();
 		if(read == -1){
