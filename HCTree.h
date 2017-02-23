@@ -1,3 +1,8 @@
+/*
+Name: Gunpod Lertkomolsuk
+Date: 22th Febuary
+Overview: This is protocol file for Huffman Compression Node Class.
+*/
 #ifndef HCTREE_H
 #define HCTREE_H
 
@@ -40,21 +45,15 @@ public:
         leaves = vector<HCNode*>(256, (HCNode*) 0);
     }
     ~HCTree();
-    string result_in;
+
     int totalbits;
     bool struc;
-
-    unsigned int file_size(string);
-    //fill in encoded bit in string to find first byte
-    // void build_structure(ifstream&, BitInputStream&);
-    // HCNode* structure_helper(HCNode*, string, ifstream&);
-
-
-
+    //traverse tree counting how many bits will be needed to encode the text.
     void find_future(byte symbol);
+    //delete node recursively
     void helper_del(HCNode*);
-
     HCNode* return_root();
+    //Set root of HCtree to a certain node to facilitate decode when decompressing.
     void set_root();
     /** Use the Huffman algorithm to build a Huffman coding trie.
      *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 
@@ -70,31 +69,11 @@ public:
      */
     void encode(byte symbol, BitOutputStream& out) const;
 
-    /** Write to the given ofstream
-     *  the sequence of bits (as ASCII) coding the given symbol.
-     *  PRECONDITION: build() has been called, to create the coding
-     *  tree, and initialize root pointer and leaves vector.
-     *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT 
-     *  BE USED IN THE FINAL SUBMISSION.
-     */
-    // void encode(byte symbol, ofstream& out) const;
-
-
     /** Return symbol coded in the next sequence of bits from the stream.
      *  PRECONDITION: build() has been called, to create the coding
      *  tree, and initialize root pointer and leaves vector.
      */
     int decode(BitInputStream& in);
-
-    /** Return the symbol coded in the next sequence of bits (represented as 
-     *  ASCII text) from the ifstream.
-     *  PRECONDITION: build() has been called, to create the coding
-     *  tree, and initialize root pointer and leaves vector.
-     *  THIS METHOD IS USEFUL FOR THE CHECKPOINT BUT SHOULD NOT BE USED
-     *  IN THE FINAL SUBMISSION.
-     */
-    // int decode(ifstream& in) const;
-
 };
 
 #endif // HCTREE_H

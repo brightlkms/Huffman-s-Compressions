@@ -1,3 +1,8 @@
+/*
+Name: Gunpod Lertkomolsuk
+Date: 22th Febuary
+Overview: A protocol file for BitOutput Stream class. 
+*/
 #ifndef BITOUTPUTSTREAM_H
 #define BITOUTPUTSTREAM_H
 
@@ -27,8 +32,9 @@ class BitOutputStream {
 
         // write bit to the bitwise buffer
         void writeBit(unsigned int bit, bool);
-
+        //Set total bit and bit shift for set RemainBit
         void setRemainBit(int, int);
+        //return how many bits on bitwisebuffer
         int returnNbits();
 };
 #endif

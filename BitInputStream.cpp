@@ -1,7 +1,7 @@
 /*
 Name: Gunpod Lertkomolsuk
 Date: 22th Febuary
-Overview: A protocol file for Bitinput Stream class. 
+Overview: An implementation file for BitInputStream. Functions include readBit that reads the next bit in the bitwise buffer. Once 8 bits are read, function fill gets called to grab the next byte. setTbit can set tell inputstream the totalbit that will be decoded. The setRemainder function serves the purpose of setting bitshift and remainder bit for bitinputstream object. This is for shifting the last bit appropriately
 */
 #include "BitInputStream.h"
 
@@ -24,7 +24,6 @@ unsigned int BitInputStream::readBit(){
   }
   if(bitshift == tbit){
     for(int i=0;i<remainBit;i++){
-      // cout << "shift" <<endl;
       buf=(buf<<1); 
       nbits++;
     }

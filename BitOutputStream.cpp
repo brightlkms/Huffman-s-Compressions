@@ -1,20 +1,22 @@
+/*
+Name: Gunpod Lertkomolsuk
+Date: 22th Febuary
+Overview: An implementation file for BitOutputStream. Functions include writeBit that writes the next bit in the bitwise buffer. Once 8 bits are written, function flush gets write out the 8 bits to the out stream file.
+*/
 #include "BitOutputStream.h"
 
 using namespace std;
 
 void BitOutputStream::flush() {
-  out.put(buf);  // write the bitwise buffer to the ostream
-  out.flush();   // flush the ostream (optional, slower to do it here)
-  buf = 0;       // clear the bitwise buffer
-  nbits = 0;     // bitwise buffer is cleared, so there are 0 bits in it
+  out.put(buf);  
+  out.flush();   
+  buf = 0;       
+  nbits = 0;     
 }
 int BitOutputStream::returnNbits(){
   return nbits;
 }
 void BitOutputStream::writeBit(unsigned int bit, bool doshift) {
-  // flush the bitwise buffer if it is full
-  // set the next open bit of the bitwise buffer to 'bit' (how?)
-  //case for last byte
   if(doshift){
     for(int i=0; i < bitshift; i++){
       buf = (buf << 1); 
@@ -30,8 +32,6 @@ void BitOutputStream::writeBit(unsigned int bit, bool doshift) {
       buf = (buf << 1) | 1;
     else if(bit == 0)
       buf = (buf << 1); 
-    //what happens when we run into case where you don't have to perfectly 8 bits
-    // increment the number of bits in our bitwise buffer
     nbits++;
     tbit--;
     if(nbits == 8) {
@@ -44,6 +44,3 @@ void BitOutputStream::setRemainBit(int tb, int bs){
   bitshift = bs;
   remainBit = 8-bs;
 }
-// int BitOutputStream::getRemainBit(){
-//   return tbit;
-// }

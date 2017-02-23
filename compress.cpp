@@ -1,13 +1,26 @@
+/*
+Name: Gunpod Lertkomolsuk
+Date: 22th Febuary
+Overview: Compress program takes in two arguemnts, first argument is the file that compress will encode and second argument is the out file where the encoded objects will go. Each helper function description is written above the function protocol.
+*/
 #include "HCTree.h"
 #include "HCNode.h"
 #include <math.h>
 
 using namespace std;
+
+//Binary function takes in int and BitOutputStream as a reference. It takes in the integer number writes equivalent binary bit to outputstream
+void binary(int, BitOutputStream&);
+
+//file_size function takes in name of an infile as string and return the size in byte
+unsigned int file_size(string);
+
+//get_twobit takes in HCNode* pointer and bitoutputstream. It will find what type of children that node has. 00- both children node are leafs. 01 - left child node is a child. 10 - right child node is a leaf. 11 - both children nodes are not leaf nodes
+int get_twobit(HCNode*, BitOutputStream&);
+
+//traverse function takes in HCNode pointer, bitoutputstream and ofstream. It recursively encodes to a file depending on the command that was returned from get_twobit
 void traverse(HCNode*, BitOutputStream&, ofstream&);
-int get_twobit(HCNode* ptr, BitOutputStream&);
-int find_depth(HCNode* ptr);
-void binary(int task, BitOutputStream& out);
-unsigned int file_size(string filename);
+
 
 int main(int argc, char** argv){
 
@@ -40,7 +53,7 @@ int main(int argc, char** argv){
 	//Constructing Huff man
 	HCTree hct;
 	hct.build(freqs);
-
+	//Find amount of unique nodes
 	int leafs=0;
 	for(auto a: freqs){
 		if(a!=0){
@@ -51,17 +64,19 @@ int main(int argc, char** argv){
 	ofstream out;
 	out.open(outfile);
 	BitOutputStream bos(out);
-	//Find future totalbit, which is header+ch
+	
 	in.clear();
 	in.seekg(0, ios::beg);
-	if(leafs > 1)
+	// if(leafs > 1)
 	binary(leafs, bos);
 
-	//ENCODE MAGICAL IMPOSSIBLE HEADER
+	//ENCODE MAGICAL HEADER
 	//-----------------------------------------------------
 	traverse(hct.return_root(), bos, out);
 	//-----------------------------------------------------
+	
 	hct.totalbits=0;
+	//temp holds the number of bits there will be for content in the file excluding everyelse
 	int temp;
 	while(1){
 		next = in.get();
@@ -71,23 +86,13 @@ int main(int argc, char** argv){
 	temp = hct.totalbits;
 	unsigned int headerSize = file_size(outfile);
 	int real_bitshift = 8-((temp+bos.returnNbits())%8);
-	//FUNCTION
-	//setRemain bit takes in totalbit to find bitshift and remainBit
-	//bitshift is put before encoding characters
-	//remainBit is needed for write function.
-	//problem: you need to find length of whole thing before writing anything
-	//POST: totalbits for header and characters excluding bitshift
+
 	in.clear();
 	in.seekg(0, ios::beg);
 
 	bos.setRemainBit(temp+8, real_bitshift);
-	//ENCODE PADDED BIT
-	//Put number of shift at the beginning of the file
-	//POST: got total bit length
-	// int extra_bit = bos.returnNbits();
 	binary(real_bitshift, bos);
-	//-----------------------------------------------------
-	//Build tree so need to clear
+
 	in.clear();
 	in.seekg(0, ios::beg);
 	//ENCODE CHAR
@@ -98,28 +103,21 @@ int main(int argc, char** argv){
 	}
 	bos.writeBit(0, true);
 	//-----------------------------------------------------
-	//missing code from reading byte and encoding it to out file
 	out.close();
 	in.close();
 
 	return 0;
 }
 void traverse(HCNode* ptr, BitOutputStream& bos, ofstream& out){
-	//write ASCI symbol to file
 	binary(ptr->symbol, bos);
 	int command = get_twobit(ptr, bos);
-	//command 
-	//1 = 00 //2 = 01//3 = 10//4 = 11
-	//write 2 bits
+
 	if(command == 1){
 		binary(ptr->c0->symbol, bos);
 	}
-	//write one param
 	else if(command == 2){
 		traverse(ptr->c0, bos, out);
 	}	
-	//1.right child symbol 
-	//2. number of times to get to root
 	else if(command == 3){
 		binary(ptr->c0->symbol, bos);
 		traverse(ptr->c1, bos, out);

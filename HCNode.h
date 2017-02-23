@@ -1,3 +1,8 @@
+/*
+Name: Gunpod Lertkomolsuk
+Date: 22th Febuary
+Overview: This is protocol file for Huffman Compression Node Class.
+*/
 #ifndef HCNODE_H
 #define HCNODE_H
 

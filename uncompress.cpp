@@ -1,11 +1,19 @@
+/*
+Name: Gunpod Lertkomolsuk
+Date: 22th Febuary
+Overview: Uncompress program takes in two arguemnts, first argument is the infile that uncompress will read from and second argument is the outfile where the encoded objects will get decoded. Each helper function description is written above the function protocol.
+*/
 #include "HCNode.h"
 #include "HCTree.h"
 #include <math.h>
 
 using namespace std;
 
+//takes in string of the name of infile and returns the size of the file in bytes
 unsigned int file_size(string);
+//traverse takes in HCNode pointer, bit input stream object, in stream and int reference. It recursivesly decode encoded bytes. 
 void traverse(HCNode*, BitInputStream&, ifstream&, int&);
+//Binary function takes in bitinputstream object as a reference. It will read the next 8 bits and find the decimal equivalence of the given byte. 
 int binary(BitInputStream&);
 
 int main(int argc, char** argv){
@@ -48,6 +56,7 @@ int main(int argc, char** argv){
 		r = hct.decode(bis);
 		ch = r;
 		// cout << r << endl;
+		// cout << "bright";
 		if (r == -1){
 			// cout << "hello" << endl;
 			break;

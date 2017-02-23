@@ -9,9 +9,9 @@ using namespace std;
 
 HCTree::~HCTree(){
 	// while(pq.size()!=0){
- //  	helper_del(root);
- //  }
+  	// helper_del(root);
 }
+
 void HCTree::helper_del(HCNode* ptr){
 	cout << ptr <<endl;
 	if(ptr->c0==0 && ptr->c1==0)

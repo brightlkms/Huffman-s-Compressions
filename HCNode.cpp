@@ -1,7 +1,7 @@
 /*
 Name: Gunpod Lertkomolsuk
-Date: 9th Febuary
-Overview: This is an implementation file for Huffman Compression Node.
+Date: 22th Febuary
+Overview: This is an implementation file for Huffman Compression Node Class.
 */
 #include "HCNode.h"
 
