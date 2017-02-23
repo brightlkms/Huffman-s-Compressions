@@ -35,34 +35,44 @@ int main(int argc, char** argv){
 
 	int size = file_size(infile)*8; 
 	bis.setTbit(size);
-
+	int bitshift;
 	hct.set_root();
-	int leafs = binary(bis);
 
-	traverse(hct.return_root(), bis, in, leafs);
 	//--------------------
 	ofstream out;
 	out.open(outfile);
-	
-	//DECODE PADDING
-	int bitshift = binary(bis);
-	bis.setRemainder(bitshift);
-	int r;
-	unsigned char ch;
-	// cout << endl;
-	
-	//DECODE CH
-	while(1){
-		r = hct.decode(bis);
-		ch = r;
-		// cout << r << endl;
-		// cout << "bright";
-		if (r == -1){
-			// cout << "hello" << endl;
-			break;
+
+	int leafs = binary(bis);
+
+	if(leafs==1){
+		bitshift = binary(bis);
+		bis.setRemainder(bitshift);
+		int asci = binary(bis);
+
+		while(bis.readBit() != -1){
+			out.put(asci);
 		}
-		else{
-			out.put(ch);
+	}
+	else{
+		traverse(hct.return_root(), bis, in, leafs);
+
+		
+		//DECODE PADDING
+		bitshift = binary(bis);
+		bis.setRemainder(bitshift);
+		int r;
+		unsigned char ch;
+		
+		//DECODE CH
+		while(1){
+			r = hct.decode(bis);
+			ch = r;
+			if (r == -1){
+				break;
+			}
+			else{
+				out.put(ch);
+			}
 		}
 	}
 	in.close();

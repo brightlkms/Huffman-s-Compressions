@@ -4,7 +4,7 @@ CC=g++
 CXXFLAGS=-std=c++11 -g
 LDFLAGS=-g
 
-all: compress
+all: compress uncompress
 
 compress: BitInputStream.o BitOutputStream.o HCNode.o HCTree.o
 

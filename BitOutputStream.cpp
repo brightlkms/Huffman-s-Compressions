@@ -8,6 +8,7 @@ Overview: An implementation file for BitOutputStream. Functions include writeBit
 using namespace std;
 
 void BitOutputStream::flush() {
+  // cout << "hey";
   out.put(buf);  
   out.flush();   
   buf = 0;       

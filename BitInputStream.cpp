@@ -13,20 +13,18 @@ void BitInputStream::fill(){
 }
 
 unsigned int BitInputStream::readBit(){
-  if(in.eof()){
+  if(in.eof() || tbit==0){
     return -1;
   }
   if(nbits == 8) {
       fill();
-  }
-  if(tbit==0){
-    return -1;
   }
   if(bitshift == tbit){
     for(int i=0;i<remainBit;i++){
       buf=(buf<<1); 
       nbits++;
     }
+    return -1;
   }
   else{
     int nextBit = buf & (1 << 7);

@@ -67,45 +67,66 @@ int main(int argc, char** argv){
 	
 	in.clear();
 	in.seekg(0, ios::beg);
-	// if(leafs > 1)
-	binary(leafs, bos);
-
-	//ENCODE MAGICAL HEADER
-	//-----------------------------------------------------
-	traverse(hct.return_root(), bos, out);
-	//-----------------------------------------------------
-	
-	hct.totalbits=0;
-	//temp holds the number of bits there will be for content in the file excluding everyelse
-	int temp;
-	while(1){
-		next = in.get();
-		if(in.eof()) break;
-		hct.find_future(next);
+	if(leafs == 1){
+		int i=0;
+		int freq, asci;
+		
+		for(auto a : freqs){
+			if(a!=0){
+				freq=a;//freq
+				asci=i;//index
+			}
+			i++;
+		}
+		int bitshift = (8-(freq%8));
+		binary(leafs, bos);//write leaf
+		binary(bitshift, bos);//write bitshift
+		binary(asci, bos);//write bitshift
+		bos.setRemainBit(0, bitshift);
+		bos.writeBit(1, true);//shiftbits
+		
+		for(int i=0;i<freq;i++){
+			bos.writeBit(1, false);
+		}
 	}
-	temp = hct.totalbits;
-	unsigned int headerSize = file_size(outfile);
-	int real_bitshift = 8-((temp+bos.returnNbits())%8);
+	else{
+		binary(leafs, bos);
+		//ENCODE MAGICAL HEADER
+		//-----------------------------------------------------
+		traverse(hct.return_root(), bos, out);
+		//-----------------------------------------------------
+		
+		hct.totalbits=0;
+		//temp holds the number of bits there will be for content in the file excluding everyelse
+		int temp;
+		while(1){
+			next = in.get();
+			if(in.eof()) break;
+			hct.find_future(next);
+		}
+		temp = hct.totalbits;
+		unsigned int headerSize = file_size(outfile);
+		int real_bitshift = 8-((temp+bos.returnNbits())%8);
 
-	in.clear();
-	in.seekg(0, ios::beg);
+		in.clear();
+		in.seekg(0, ios::beg);
 
-	bos.setRemainBit(temp+8, real_bitshift);
-	binary(real_bitshift, bos);
+		bos.setRemainBit(temp+8, real_bitshift);
+		binary(real_bitshift, bos);
 
-	in.clear();
-	in.seekg(0, ios::beg);
-	//ENCODE CHAR
-	while(1){
-		next = in.get();
-		if(in.eof()) break;
-		hct.encode(next, bos);
+		in.clear();
+		in.seekg(0, ios::beg);
+		//ENCODE CHAR
+		while(1){
+			next = in.get();
+			if(in.eof()) break;
+			hct.encode(next, bos);
+		}
+		bos.writeBit(0, true);
 	}
-	bos.writeBit(0, true);
 	//-----------------------------------------------------
 	out.close();
 	in.close();
-
 	return 0;
 }
 void traverse(HCNode* ptr, BitOutputStream& bos, ofstream& out){
