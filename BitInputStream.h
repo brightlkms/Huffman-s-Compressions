@@ -1,3 +1,8 @@
+/*
+Name: Gunpod Lertkomolsuk
+Date: 22th Febuary
+Overview: A protocol file for Bitinput Stream class. 
+*/
 #ifndef BITINPUTSTREAM_H
 #define BITINPUTSTREAM_H
 
@@ -27,8 +32,9 @@ class BitInputStream {
         // read bit from the bitwise buffer
         unsigned int readBit();
 
-        //track remaining bit
+        //set totalbit to help track
         void setTbit(int);
+        //set bitshift and remainbit
         void setRemainder(int);
 };
 #endif

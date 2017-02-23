@@ -1,3 +1,8 @@
+/*
+Name: Gunpod Lertkomolsuk
+Date: 22th Febuary
+Overview: A protocol file for Bitinput Stream class. 
+*/
 #include "BitInputStream.h"
 
 using namespace std;
